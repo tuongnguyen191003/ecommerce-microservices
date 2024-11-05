@@ -76,6 +76,10 @@ jobs:
           host: ${{ secrets.STAGING_HOST }}
           username: ${{ secrets.STAGING_USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
+          timeout: 60s
+          command_timeout: 20m
+          debug: true
           script: |
             cd /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices
             docker-compose -f docker-compose.staging.yml pull

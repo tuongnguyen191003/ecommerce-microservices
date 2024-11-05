@@ -77,8 +77,8 @@ jobs:
           username: ${{ secrets.STAGING_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
-          timeout: 60s
-          command_timeout: 20m
+          timeout: 180s
+          command_timeout: 30m
           debug: true
           script: |
             cd /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices

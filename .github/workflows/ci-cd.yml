@@ -71,7 +71,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to Staging Environment
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.STAGING_HOST }}
           username: ${{ secrets.STAGING_USER }}
@@ -80,4 +80,5 @@ jobs:
             cd /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices
             docker-compose -f docker-compose.staging.yml pull
             docker-compose -f docker-compose.staging.yml up -d
+
 

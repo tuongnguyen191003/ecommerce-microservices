@@ -1,0 +1,83 @@
+name: CI/CD for E-commerce Microservices
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Build and push Docker image for UserService
+      - name: Build and push Docker images for UserService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/UserService
+          tags: tuongnguyen191003/user-service:latest
+          push: true
+
+      # Build and push Docker image for ProductService
+      - name: Build and push Docker images for ProductService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/ProductService
+          tags: tuongnguyen191003/product-service:latest
+          push: true
+
+      # Build and push Docker image for OrderService
+      - name: Build and push Docker images for OrderService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/OrderService
+          tags: tuongnguyen191003/order-service:latest
+          push: true
+
+      # Build and push Docker image for PaymentService
+      - name: Build and push Docker images for PaymentService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/PaymentService
+          tags: tuongnguyen191003/payment-service:latest
+          push: true
+
+      # Build and push Docker image for NotificationService
+      - name: Build and push Docker images for NotificationService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/NotificationService
+          tags: tuongnguyen191003/notification-service:latest
+          push: true
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Staging Environment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices
+            docker-compose -f docker-compose.staging.yml pull
+            docker-compose -f docker-compose.staging.yml up -d
+

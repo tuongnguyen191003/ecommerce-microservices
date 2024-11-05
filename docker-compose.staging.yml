@@ -1,0 +1,72 @@
+
+services:
+  user-service:
+    image: tuongnguyen191003/user-service:latest
+    ports:
+      - "5001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+    depends_on:
+      - database
+
+  product-service:
+    image: tuongnguyen191003/product-service:latest
+    ports:
+      - "5002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+    depends_on:
+      - database
+      - cache
+
+  order-service:
+    image: tuongnguyen191003/order-service:latest
+    ports:
+      - "5003:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+    depends_on:
+      - database
+      - notification-service
+
+  payment-service:
+    image: tuongnguyen191003/payment-service:latest
+    ports:
+      - "5004:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+    depends_on:
+      - order-service
+
+  notification-service:
+    image: tuongnguyen191003/notification-service:latest
+    ports:
+      - "5005:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+
+  api-gateway:
+    image: tuongnguyen191003/api-gateway:latest
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+    depends_on:
+      - user-service
+      - product-service
+      - order-service
+      - payment-service
+      - notification-service
+
+  database:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=191003
+    ports:
+      - "1433:1433"
+
+  cache:
+    image: redis:latest
+    ports:
+      - "6379:6379"

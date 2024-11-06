@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # Sử dụng self-hosted runner đã cài trên server
 
     steps:
       - name: Checkout repository
@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build and push Docker image for UserService
+      # Build and push Docker images for each service
       - name: Build and push Docker images for UserService
         uses: docker/build-push-action@v2
         with:
@@ -30,7 +30,6 @@ jobs:
           tags: tuongnguyen191003/user-service:latest
           push: true
 
-      # Build and push Docker image for ProductService
       - name: Build and push Docker images for ProductService
         uses: docker/build-push-action@v2
         with:
@@ -38,7 +37,6 @@ jobs:
           tags: tuongnguyen191003/product-service:latest
           push: true
 
-      # Build and push Docker image for OrderService
       - name: Build and push Docker images for OrderService
         uses: docker/build-push-action@v2
         with:
@@ -46,7 +44,6 @@ jobs:
           tags: tuongnguyen191003/order-service:latest
           push: true
 
-      # Build and push Docker image for PaymentService
       - name: Build and push Docker images for PaymentService
         uses: docker/build-push-action@v2
         with:
@@ -54,7 +51,6 @@ jobs:
           tags: tuongnguyen191003/payment-service:latest
           push: true
 
-      # Build and push Docker image for NotificationService
       - name: Build and push Docker images for NotificationService
         uses: docker/build-push-action@v2
         with:
@@ -63,7 +59,7 @@ jobs:
           push: true
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # Sử dụng self-hosted runner trên server để tránh SSH qua internet
     needs: build
 
     steps:
@@ -71,18 +67,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to Staging Environment
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          timeout: 180s
-          command_timeout: 30m
-          debug: true
-          script: |
-            cd /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices
-            docker-compose -f docker-compose.staging.yml pull
-            docker-compose -f docker-compose.staging.yml up -d
-
-
+        run: |
+          cd /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices
+          docker-compose -f docker-compose.staging.yml pull
+          docker-compose -f docker-compose.staging.yml up -d

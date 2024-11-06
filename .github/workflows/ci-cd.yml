@@ -19,43 +19,50 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}  # ginhenrick
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Tuong@191003
 
       # Build and push Docker images for each service
       - name: Build and push Docker images for UserService
         uses: docker/build-push-action@v2
         with:
           context: ./services/UserService
-          tags: tuongnguyen191003/user-service:latest
+          tags: ginhenrick/user-service:latest
           push: true
 
       - name: Build and push Docker images for ProductService
         uses: docker/build-push-action@v2
         with:
           context: ./services/ProductService
-          tags: tuongnguyen191003/product-service:latest
+          tags: ginhenrick/product-service:latest
           push: true
 
       - name: Build and push Docker images for OrderService
         uses: docker/build-push-action@v2
         with:
           context: ./services/OrderService
-          tags: tuongnguyen191003/order-service:latest
+          tags: ginhenrick/order-service:latest
           push: true
 
       - name: Build and push Docker images for PaymentService
         uses: docker/build-push-action@v2
         with:
           context: ./services/PaymentService
-          tags: tuongnguyen191003/payment-service:latest
+          tags: ginhenrick/payment-service:latest
           push: true
 
       - name: Build and push Docker images for NotificationService
         uses: docker/build-push-action@v2
         with:
           context: ./services/NotificationService
-          tags: tuongnguyen191003/notification-service:latest
+          tags: ginhenrick/notification-service:latest
+          push: true
+
+      - name: Build and push Docker images for ApiGateway
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/ApiGateway
+          tags: ginhenrick/api-gateway:latest
           push: true
 
   deploy:
@@ -65,6 +72,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Deploy to Staging Environment
         run: |

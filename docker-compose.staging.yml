@@ -63,9 +63,11 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=191003
     ports:
-      - "1433:1433"
+      # - "1433:1433"
+      - "1434:1433"  # Đổi cổng bên ngoài thành 1434 để tránh xung đột với sqlserver
 
   cache:
     image: redis:latest
     ports:
-      - "6379:6379"
+      # - "6379:6379"
+      - "6380:6379"  # Đổi cổng bên ngoài thành 6380 để tránh xung đột với redis_container

@@ -61,7 +61,7 @@ jobs:
       - name: Build and push Docker images for ApiGateway
         uses: docker/build-push-action@v2
         with:
-          context: ./services/ApiGateway
+          context: ./services/APIGateway
           tags: ginhenrick/api-gateway:latest
           push: true
 

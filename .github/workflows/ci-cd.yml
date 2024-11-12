@@ -19,8 +19,14 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}  # ginhenrick
-          password: ${{ secrets.DOCKER_PASSWORD }}  # Tuong@191003
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+        # Test từng service trước khi build
+      - name: Run tests
+        run:  |
+          for service in UserService ProductService CartService InventoryService ShippingService OrderService PaymentService NotificationService ReviewRatingService AdminService; do
+            dotnet test ./services/$service/$service.csproj
+          done
 
       # Build and push Docker images for each service
       - name: Build and push Docker images for UserService
@@ -35,6 +41,27 @@ jobs:
         with:
           context: ./services/ProductService
           tags: ginhenrick/product-service:latest
+          push: true
+
+      - name: Build and push Docker images for CartService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/CartService
+          tags: ginhenrick/cart-service:latest
+          push: true
+
+      - name: Build and push Docker images for InventoryService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/InventoryService
+          tags: ginhenrick/inventory-service:latest
+          push: true
+
+      - name: Build and push Docker images for ShippingService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/ShippingService
+          tags: ginhenrick/shipping-service:latest
           push: true
 
       - name: Build and push Docker images for OrderService
@@ -56,6 +83,20 @@ jobs:
         with:
           context: ./services/NotificationService
           tags: ginhenrick/notification-service:latest
+          push: true
+
+      - name: Build and push Docker images for ReviewRatingService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/ReviewRatingService
+          tags: ginhenrick/review-rating-service:latest
+          push: true
+
+      - name: Build and push Docker images for AdminService
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/AdminService
+          tags: ginhenrick/admin-service:latest
           push: true
 
       - name: Build and push Docker images for ApiGateway

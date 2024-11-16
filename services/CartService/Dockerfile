@@ -2,18 +2,17 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
-# Copy csproj and restore as distinct layers
-COPY ./services/CartService/CartService.csproj ./
-RUN dotnet restore
-
 # Copy Shared Library
 COPY ./shared/SharedLibrary ./shared/SharedLibrary
 RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
 
+# Copy CartService csproj and restore dependencies
+COPY ./services/CartService/CartService.csproj ./
+RUN dotnet restore
 
-# Copy the rest of the application code and publish
+# Copy the rest of the CartService code
 COPY ./services/CartService ./
-RUN dotnet publish -c Release -o out
+RUN dotnet publish CartService.csproj -c Release -o out
 
 # Stage 2: Build a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

@@ -7,12 +7,13 @@ COPY ./shared/SharedLibrary ./shared/SharedLibrary
 RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
 
 # Copy ShippingService csproj and restore dependencies
-COPY ./services/ShippingService/ShippingService.csproj ./
+COPY ./services/ShippingService/ShippingService.csproj ./services/ShippingService/
+WORKDIR /app/services/ShippingService
 RUN dotnet restore
 
 # Copy the rest of the ShippingService code
-COPY ./services/ShippingService ./
-RUN dotnet publish ShippingService.csproj -c Release -o out
+COPY ./services/ShippingService ./services/ShippingService
+RUN dotnet publish ShippingService.csproj -c Release -o /app/out
 
 # Stage 2: Build a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

@@ -7,12 +7,13 @@ COPY ./shared/SharedLibrary ./shared/SharedLibrary
 RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
 
 # Copy InventoryService csproj and restore dependencies
-COPY ./services/InventoryService/InventoryService.csproj ./
+COPY ./services/InventoryService/InventoryService.csproj ./services/InventoryService/
+WORKDIR /app/services/InventoryService
 RUN dotnet restore
 
 # Copy the rest of the InventoryService code
-COPY ./services/InventoryService ./
-RUN dotnet publish InventoryService.csproj -c Release -o out
+COPY ./services/InventoryService ./services/InventoryService
+RUN dotnet publish InventoryService.csproj -c Release -o /app/out
 
 # Stage 2: Build a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

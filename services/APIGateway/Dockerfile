@@ -7,12 +7,13 @@ COPY ./shared/SharedLibrary ./shared/SharedLibrary
 RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
 
 # Copy APIGateway csproj and restore dependencies
-COPY ./services/APIGateway/APIGateway.csproj ./
+COPY ./services/APIGateway/APIGateway.csproj ./services/APIGateway/
+WORKDIR /app/services/APIGateway
 RUN dotnet restore
 
 # Copy the rest of the APIGateway code
-COPY ./services/APIGateway ./
-RUN dotnet publish APIGateway.csproj -c Release -o out
+COPY ./services/APIGateway ./services/APIGateway
+RUN dotnet publish APIGateway.csproj -c Release -o /app/out
 
 # Stage 2: Build a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

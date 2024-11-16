@@ -7,12 +7,13 @@ COPY ./shared/SharedLibrary ./shared/SharedLibrary
 RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
 
 # Copy CartService csproj and restore dependencies
-COPY ./services/CartService/CartService.csproj ./
+COPY ./services/CartService/CartService.csproj ./services/CartService/
+WORKDIR /app/services/CartService
 RUN dotnet restore
 
 # Copy the rest of the CartService code
-COPY ./services/CartService ./
-RUN dotnet publish CartService.csproj -c Release -o out
+COPY ./services/CartService ./services/CartService
+RUN dotnet publish CartService.csproj -c Release -o /app/out
 
 # Stage 2: Build a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

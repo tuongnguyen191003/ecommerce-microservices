@@ -7,12 +7,13 @@ COPY ./shared/SharedLibrary ./shared/SharedLibrary
 RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
 
 # Copy AdminService csproj and restore dependencies
-COPY ./services/AdminService/AdminService.csproj ./
+COPY ./services/AdminService/AdminService.csproj ./services/AdminService/
+WORKDIR /app/services/AdminService
 RUN dotnet restore
 
 # Copy the rest of the AdminService code
-COPY ./services/AdminService ./
-RUN dotnet publish AdminService.csproj -c Release -o out
+COPY ./services/AdminService ./services/AdminService
+RUN dotnet publish AdminService.csproj -c Release -o /app/out
 
 # Stage 2: Build a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

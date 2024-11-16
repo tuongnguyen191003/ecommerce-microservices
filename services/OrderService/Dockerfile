@@ -7,12 +7,13 @@ COPY ./shared/SharedLibrary ./shared/SharedLibrary
 RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
 
 # Copy OrderService csproj and restore dependencies
-COPY ./services/OrderService/OrderService.csproj ./
+COPY ./services/OrderService/OrderService.csproj ./services/OrderService/
+WORKDIR /app/services/OrderService
 RUN dotnet restore
 
 # Copy the rest of the OrderService code
-COPY ./services/OrderService ./
-RUN dotnet publish OrderService.csproj -c Release -o out
+COPY ./services/OrderService ./services/OrderService
+RUN dotnet publish OrderService.csproj -c Release -o /app/out
 
 # Stage 2: Build a runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

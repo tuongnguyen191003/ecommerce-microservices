@@ -6,6 +6,11 @@ WORKDIR /app
 COPY *.csproj ./
 RUN dotnet restore
 
+# Copy Shared Library
+COPY ./shared/SharedLibrary ./shared/SharedLibrary
+RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
+
+
 # Copy the rest of the application code and publish
 COPY . ./
 RUN dotnet publish -c Release -o out

@@ -1,44 +1,52 @@
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using SharedLibrary.DependencyInjection;
+using SharedLibrary.Middleware;
+using SharedLibrary.Security;
+using UserService.Data;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/UserServiceLog.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+Console.WriteLine($"JWT Key from Program.cs: {builder.Configuration["Authentication:Key"]}");
+
+
+// Đăng ký các dịch vụ
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+// Đăng ký các dịch vụ từ SharedLibrary (bao gồm DbContext, JWT, Serilog)
+// Add DbContext with connection string
+builder.Services.AddDbContext<UserDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("eCommerceConnection")));
+
+// Thêm SharedServices
+builder.Services.AddSharedServices<UserDbContext>(builder.Configuration, "UserServiceLogs");
+
+// Đăng ký JwtTokenGenerator
+builder.Services.AddSingleton<JwtTokenGenerator>();
+
+
+var connectionString = builder.Configuration.GetConnectionString("eCommerceConnection");
+Log.Information($"Connection string: {connectionString}");
+
+
+    
+
+builder.Services.AddControllers();
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseMiddleware<GlobalException>();
+app.UseSharedPolicies();
+app.MapControllers();
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

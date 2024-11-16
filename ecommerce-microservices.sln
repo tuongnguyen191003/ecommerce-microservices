@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "services\Or
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService", "services\NotificationService\NotificationService.csproj", "{C6897696-94FE-4B63-BD5F-77D709783A75}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{49723468-789A-4201-90A0-C21AF6F58E98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "shared\SharedLibrary\SharedLibrary.csproj", "{B05FB6B6-F4BC-4D37-A412-5E243454703B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,10 @@ Global
 		{C6897696-94FE-4B63-BD5F-77D709783A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6897696-94FE-4B63-BD5F-77D709783A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6897696-94FE-4B63-BD5F-77D709783A75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B05FB6B6-F4BC-4D37-A412-5E243454703B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B05FB6B6-F4BC-4D37-A412-5E243454703B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B05FB6B6-F4BC-4D37-A412-5E243454703B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B05FB6B6-F4BC-4D37-A412-5E243454703B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +66,7 @@ Global
 		{4852BDF2-A55B-40E3-B6DF-9B805DFD9343} = {4140B485-C72D-4D19-9838-F26A4A07DA62}
 		{07322EB9-4A98-4101-8D97-D42C298A5EBA} = {4140B485-C72D-4D19-9838-F26A4A07DA62}
 		{C6897696-94FE-4B63-BD5F-77D709783A75} = {4140B485-C72D-4D19-9838-F26A4A07DA62}
+		{B05FB6B6-F4BC-4D37-A412-5E243454703B} = {49723468-789A-4201-90A0-C21AF6F58E98}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B8D7796-61E7-4E3E-ADE1-9C437F033FAC}

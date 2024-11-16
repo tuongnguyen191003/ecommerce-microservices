@@ -1,0 +1,13 @@
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/bin/Debug/net8.0/SharedLibrary.deps.json
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/bin/Debug/net8.0/SharedLibrary.dll
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/bin/Debug/net8.0/SharedLibrary.pdb
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/SharedLibrary.csproj.AssemblyReference.cache
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/SharedLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/SharedLibrary.AssemblyInfoInputs.cache
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/SharedLibrary.AssemblyInfo.cs
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/SharedLibrary.csproj.CoreCompileInputs.cache
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/SharedLibrary.sourcelink.json
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/SharedLibrary.dll
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/refint/SharedLibrary.dll
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/SharedLibrary.pdb
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/shared/SharedLibrary/obj/Debug/net8.0/ref/SharedLibrary.dll

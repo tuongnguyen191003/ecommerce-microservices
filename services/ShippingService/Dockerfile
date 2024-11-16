@@ -11,7 +11,7 @@ COPY ./shared/SharedLibrary ./shared/SharedLibrary
 RUN dotnet build ./shared/SharedLibrary/SharedLibrary.csproj
 
 # Copy the rest of the application code and publish
-COPY . ./
+COPY ./services/ShippingService ./
 RUN dotnet publish -c Release -o out
 
 # Stage 2: Build a runtime image

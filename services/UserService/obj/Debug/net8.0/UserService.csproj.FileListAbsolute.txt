@@ -179,3 +179,7 @@
 /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/bin/Debug/net8.0/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll
 /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/bin/Debug/net8.0/System.ClientModel.dll
 /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/bin/Debug/net8.0/System.Formats.Asn1.dll
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/bin/Debug/net8.0/Serilog.AspNetCore.dll
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/bin/Debug/net8.0/Serilog.Extensions.Hosting.dll
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/bin/Debug/net8.0/Serilog.Formatting.Compact.dll
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/bin/Debug/net8.0/Serilog.Settings.Configuration.dll

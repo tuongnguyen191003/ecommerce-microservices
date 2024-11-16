@@ -33,6 +33,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/UserService/Dockerfile 
           tags: ginhenrick/user-service:latest
           push: true
 
@@ -40,6 +41,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/ProductService/Dockerfile 
           tags: ginhenrick/product-service:latest
           push: true
 
@@ -47,6 +49,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/CartService/Dockerfile 
           tags: ginhenrick/cart-service:latest
           push: true
 
@@ -54,6 +57,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/InventoryService/Dockerfile 
           tags: ginhenrick/inventory-service:latest
           push: true
 
@@ -61,6 +65,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/ShippingService/Dockerfile 
           tags: ginhenrick/shipping-service:latest
           push: true
 
@@ -68,6 +73,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/OrderService/Dockerfile 
           tags: ginhenrick/order-service:latest
           push: true
 
@@ -75,6 +81,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/PaymentService/Dockerfile 
           tags: ginhenrick/payment-service:latest
           push: true
 
@@ -82,6 +89,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/NotificationService/Dockerfile 
           tags: ginhenrick/notification-service:latest
           push: true
 
@@ -89,6 +97,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/ReviewRatingService/Dockerfile 
           tags: ginhenrick/review-rating-service:latest
           push: true
 
@@ -96,6 +105,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/AdminService/Dockerfile 
           tags: ginhenrick/admin-service:latest
           push: true
 
@@ -103,6 +113,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
+          file: ./services/APIGateway/Dockerfile 
           tags: ginhenrick/api-gateway:latest
           push: true
 

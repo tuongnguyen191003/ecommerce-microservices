@@ -80,7 +80,7 @@ The database design is tailored for e-commerce needs, handling user accounts, pr
 
 ## 🐳 **Containerized Docker Images**
 
-![Dockerized Services](placeholder-docker-image-link)
+![Dockerized Services](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/Containerize Docker Images.png)
 
 Each microservice is encapsulated in Docker containers, ensuring consistency across development, staging, and production environments.
 

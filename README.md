@@ -78,11 +78,25 @@ The database design is tailored for e-commerce needs, handling user accounts, pr
 
 ---
 
-## 🐳 **Containerized Docker Images**
+
+## 🐳 Dockerizing Containers with Docker Compose
+
+Docker Compose simplifies multi-container application management. Here's a concise overview:
+
+| 🧩 **Aspect**      | ⚙️ **Details**                                                                                          |
+|--------------------|-------------------------------------------------------------------------------------------------------|
+| **Concept**        | Defines and manages multi-container Docker apps using a `docker-compose.staging.yml` file.                   |
+| **Functions**      | - Configures services (e.g., backend, database).<br>- Automates image build & container orchestration. |
+| **Benefits**       | - Simplifies setup.<br>- Ensures consistency across environments.<br>- Supports scalability & efficiency. |
+| **Impact**         | Boosts productivity, reduces complexity, and enhances microservices deployment workflows.            |
+
+
+### 🔗 **Docker Flow**
+
+The image below illustrates how Docker Compose integrates with `Dockerfile`s to build images and manage containers efficiently:
 
 ![Dockerized Services](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/Containerize-Docker-Images.png)
 
-Each microservice is encapsulated in Docker containers, ensuring consistency across development, staging, and production environments.
 
 ---
 

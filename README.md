@@ -1,6 +1,6 @@
 # 🛒 **CyberCore Store: A Cutting-Edge E-commerce Platform for Tech Enthusiasts**
 
-![CyberCore Store Logo](placeholder-logo-link)
+![CyberCore Store Logo](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/cybercore.logo.jpg)
 
 Welcome to **CyberCore Store**, your go-to platform for buying top-notch electronic devices like smartphones, laptops, tablets, and more. Designed with a modern microservice architecture, **CyberCore Store** is built to deliver performance, scalability, and user satisfaction. 🌟
 

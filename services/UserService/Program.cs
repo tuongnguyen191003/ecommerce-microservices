@@ -22,7 +22,40 @@ Console.WriteLine($"JWT Key from Program.cs: {builder.Configuration["Authenticat
 
 // Đăng ký các dịch vụ
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "User Service API",
+        Version = "v1"
+    });
+
+    // Cấu hình JWT Bearer Token
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: 'Bearer eyJhbGciOiJIUzI1NiIsIn...'"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 // Đăng ký DbContext với connection string
 builder.Services.AddDbContext<UserDbContext>(options =>
@@ -32,7 +65,7 @@ builder.Services.AddDbContext<UserDbContext>(options =>
 builder.Services.AddSharedServices<UserDbContext>(builder.Configuration, "UserServiceLogs");
 
 // Đăng ký JwtTokenGenerator
-builder.Services.AddSingleton<JwtTokenGenerator>();
+builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
 
 builder.Services.AddControllers();

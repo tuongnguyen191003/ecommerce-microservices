@@ -7,7 +7,7 @@ using Serilog;
 
 namespace SharedLibrary.Security
 {
-    public class JwtTokenGenerator
+    public class JwtTokenGenerator : IJwtTokenGenerator
     {
         private readonly IConfiguration _config;
 
@@ -33,11 +33,18 @@ namespace SharedLibrary.Security
                 var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
                 var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+                // var claims = new[]
+                // {
+                //     new Claim(JwtRegisteredClaimNames.Sub, userId),
+                //     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                // };
+
                 var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, userId),
+                    new Claim(ClaimTypes.Name, userId),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
+
 
                 var token = new JwtSecurityToken(
                     issuer: issuer,

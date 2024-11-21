@@ -26,9 +26,9 @@ namespace SharedLibrary.DependencyInjection
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer("Bearer", options =>
                 {
-                    var key = Encoding.UTF8.GetBytes(config.GetSection("Authentication:Key").Value!);
-                    string issuer = config.GetSection("Authentication:Issuer").Value!;
-                    string audience = config.GetSection("Authentication:Audience").Value!;
+                    // var key = Encoding.UTF8.GetBytes(config.GetSection("Authentication:Key").Value!);
+                    // string issuer = config.GetSection("Authentication:Issuer").Value!;
+                    // string audience = config.GetSection("Authentication:Audience").Value!;
 
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
@@ -40,7 +40,11 @@ namespace SharedLibrary.DependencyInjection
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = issuer,
                         ValidAudience = audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                        // IssuerSigningKey = new SymmetricSecurityKey(key)
+                        //ValidIssuer = config["Authentication:Issuer"],
+                        //ValidAudience = config["Authentication:Audience"],
+                        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Authentication:Key"]))
                     };
                 });
             return services;

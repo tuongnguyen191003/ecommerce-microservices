@@ -14,10 +14,10 @@ namespace UserService.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly JwtTokenGenerator _tokenGenerator;
+        private readonly IJwtTokenGenerator _tokenGenerator;
         private readonly UserDbContext _context;
 
-        public UserController(JwtTokenGenerator tokenGenerator, UserDbContext context)
+        public UserController(IJwtTokenGenerator tokenGenerator, UserDbContext context)
         {
             _tokenGenerator = tokenGenerator;
             _context = context;
@@ -80,8 +80,9 @@ namespace UserService.Controllers
             }
 
             var token = _tokenGenerator.GenerateToken(user.Username);
-            return Ok(new { Token = token });
+            return Ok(new LoginResponse { Token = token });
         }
+
 
         [HttpGet("profile")]
         [Authorize]
@@ -99,16 +100,17 @@ namespace UserService.Controllers
                 return NotFound(new { message = "User not found." });
             }
 
-            return Ok(new
+            return Ok(new UserProfileResponse
             {
-                user.Username,
-                user.Email,
-                user.PhoneNumber,
-                user.CreatedAt,
-                user.IsActive
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                CreatedAt = user.CreatedAt,
+                IsActive = user.IsActive
             });
         }
 
+        // Update Profile
         [HttpPut("profile")]
         [Authorize]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
@@ -132,7 +134,15 @@ namespace UserService.Controllers
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Profile updated successfully." });
+            // Trả về UserProfileResponse sau khi cập nhật thành công
+            return Ok(new UserProfileResponse
+            {
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                CreatedAt = user.CreatedAt,
+                IsActive = user.IsActive
+            });
         }
 
         [HttpDelete("profile")]
@@ -154,7 +164,10 @@ namespace UserService.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Profile deleted successfully." });
+            return Ok(new DeleteProfileResponse
+            {
+                Message = "Profile deleted successfully."
+            });
         }
 
         private string HashPassword(string password)

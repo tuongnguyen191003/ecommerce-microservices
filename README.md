@@ -102,7 +102,7 @@ The image below illustrates how Docker Compose integrates with `Dockerfile`s to 
 
 ## 🔄 **CI/CD: GitHub Actions**
 
-![CI/CD Pipeline](placeholder-ci-cd-image-link)
+![CI/CD Pipeline](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/ci-cd.png)
 
 Our CI/CD pipeline automates building, testing, and deploying updates, streamlining the development process.
 
@@ -110,7 +110,7 @@ Our CI/CD pipeline automates building, testing, and deploying updates, streamlin
 
 ## 📊 **Monitoring: Prometheus & Grafana**
 
-![Monitoring Overview](placeholder-monitoring-image-link)
+![Monitoring Overview](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/videoframe_2813.png)
 
 Monitor the health and performance of the system with Prometheus and Grafana. Real-time alerts ensure maximum uptime.
 

@@ -1,87 +1,130 @@
-# 🛍️ E-commerce Microservices Platform
+# 🛒 **CyberCore Store: A Cutting-Edge E-commerce Platform for Tech Enthusiasts**
 
-Nền tảng thương mại điện tử hiện đại với kiến trúc microservices, sử dụng ASP.NET Core và Docker để cung cấp giải pháp mạnh mẽ, linh hoạt, và dễ dàng triển khai. Hệ thống tích hợp CI/CD với GitHub Actions và giám sát bằng Prometheus & Grafana.
+![CyberCore Store Logo](placeholder-logo-link)
 
----
-
-## 📑 Chi tiết các Microservice
-
-| 🧩 **Microservice**          | 🛠️ **Chức năng chính**                                                                                   | 🔗 **Giao tiếp** |
-|------------------------------|----------------------------------------------------------------------------------------------------------|------------------|
-| **User Service**             | Quản lý người dùng: đăng ký, đăng nhập, quản lý hồ sơ và địa chỉ giao hàng.                             | HTTP             |
-| **Product Service**          | Quản lý sản phẩm và danh mục sản phẩm, đánh giá sản phẩm.                                               | HTTP             |
-| **Cart Service**             | Quản lý giỏ hàng của người dùng: thêm, xóa, cập nhật sản phẩm trong giỏ hàng.                           | HTTP             |
-| **Order Service**            | Xử lý đơn hàng: tạo, cập nhật trạng thái, lịch sử đơn hàng.                                             | HTTP, RabbitMQ   |
-| **Payment Service**          | Xử lý thanh toán qua các cổng thanh toán trực tuyến hoặc COD, xử lý hoàn tiền khi đơn hàng bị hủy.      | HTTP             |
-| **Inventory Service**        | Quản lý kho hàng, cập nhật tồn kho khi có đơn hàng mới.                                                 | HTTP             |
-| **Shipping Service**         | Tính phí vận chuyển và theo dõi trạng thái giao hàng, tích hợp với đơn vị vận chuyển bên thứ ba.       | HTTP             |
-| **Notification Service**     | Gửi thông báo qua email hoặc SMS về trạng thái đơn hàng, tích hợp với SendGrid, Mailgun, và Twilio.    | RabbitMQ         |
-| **Review & Rating Service**  | Đánh giá sản phẩm, hiển thị đánh giá của người dùng.                                                    | HTTP             |
-| **Admin Service**            | Quản trị hệ thống: quản lý người dùng, sản phẩm, đơn hàng, báo cáo và phân tích.                       | HTTP             |
-| **Analytics Service**        | Theo dõi hành vi người dùng, báo cáo doanh thu và lưu lượng truy cập, tích hợp giám sát hiệu suất.    | HTTP             |
+Welcome to **CyberCore Store**, your go-to platform for buying top-notch electronic devices like smartphones, laptops, tablets, and more. Designed with a modern microservice architecture, **CyberCore Store** is built to deliver performance, scalability, and user satisfaction. 🌟
 
 ---
 
-## 🛠 Yêu cầu của Kiến trúc
+## 🚀 **About CyberCore Store**
 
-| 🏗️ **Thành phần**               | 🛠️ **Công nghệ/Sản phẩm sử dụng**                             | 🔍 **Mô tả**                                                                                                     |
-|---------------------------------|--------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| **FrontEnd**                    | Telerik UI for ASP.NET Core (Webform)                        | Giao diện người dùng với component UI của Telerik cho ASP.NET Core.                                             |
-| **BackEnd**                     | ASP.NET Core .NET 8                                         | Phát triển logic nghiệp vụ chính cho từng microservice.                                                        |
-|                                 | Entity Framework Core                                       | ORM cho CRUD đơn giản và bảo trì dễ dàng với SQL Server.                                                        |
-|                                 | Dapper                                                     | Tăng hiệu suất cho các truy vấn phức tạp.                                                                       |
-|                                 | JWT Authentication                                         | Xác thực và phân quyền cho các yêu cầu giữa các microservice và API Gateway.                                    |
-|                                 | Memcached                                                  | Lưu trữ tạm thời dữ liệu, giảm tải truy vấn cơ sở dữ liệu.                                                      |
-| **Database**                    | SQL Server trên Docker                                      | Hệ quản trị cơ sở dữ liệu chính, lưu trữ thông tin người dùng, sản phẩm, đơn hàng.                              |
-| **API Gateway**                 | Ocelot                                                     | Quản lý truy cập vào các microservices và bảo mật với JWT.                                                      |
-| **Giao tiếp giữa các Service**  | HTTP và RabbitMQ                                           | HTTP cho giao tiếp đồng bộ; RabbitMQ cho các tác vụ bất đồng bộ.                                               |
-| **CI/CD**                       | Docker, Docker-Compose, GitHub Actions                      | Triển khai container và tự động hóa quy trình CI/CD.                                                           |
-| **Triển khai**                  | Google Cloud (VPS hoặc Shared Hosting)                      | Tối ưu chi phí và có khả năng mở rộng khi cần thiết.                                                           |
-| **IDE**                         | Visual Studio Code                                         | Phát triển dự án với các extension cho ASP.NET Core và Docker.                                                 |
-| **Hệ điều hành**                | Ubuntu                                                     | Hệ điều hành nền tảng cho các server, đảm bảo hiệu suất cao.                                                    |
-| **Monitoring & Logging**        | Prometheus & Grafana, Console Logger                        | Giám sát hiệu suất và ghi log hệ thống.                                                                        |
-| **Caching**                     | Memcached                                                  | Tối ưu hóa hiệu suất và giảm thiểu số lượng truy vấn đến cơ sở dữ liệu.                                         |
-| **Message Broker**              | RabbitMQ                                                   | Xử lý tác vụ bất đồng bộ như thông báo đơn hàng và cập nhật trạng thái vận chuyển.                             |
-| **Search Engine**               | ElasticSearch/OpenSearch (tùy chọn)                        | Tìm kiếm nâng cao cho sản phẩm khi lượng dữ liệu tăng cao.                                                     |
-| **Health Checks**               | ASP.NET Core Health Checks, Prometheus                     | Kiểm tra sức khỏe và trạng thái của từng service.                                                              |
+CyberCore Store is not just another e-commerce platform. It’s a vision to empower online retail in Vietnam, offering seamless shopping experiences and supporting businesses in leveraging the potential of **E-commerce Strategy**. With Vietnam's digital economy booming, our platform integrates secure payments, real-time interactions, and marketing tools to bring a competitive edge.
 
 ---
 
-## 🔗 Tổng quan Giao tiếp giữa các thành phần
+## 🧩 **Microservices Overview**
 
-| 🔄 **Thành phần**              | 🔗 **Kết nối tới**                           | 🔄 **Giao thức**              |
-|--------------------------------|---------------------------------------------|-------------------------------|
-| **FrontEnd**                   | API Gateway                                 | HTTP                          |
-| **API Gateway**                | Các Microservices                           | HTTP                          |
-| **User Service**               | SQL Server, Notification Service            | HTTP, RabbitMQ                |
-| **Product Service**            | SQL Server, Memcached                       | HTTP                          |
-| **Cart Service**               | SQL Server, Memcached                       | HTTP                          |
-| **Order Service**              | Payment Service, Inventory Service, Shipping Service, Notification Service | HTTP, RabbitMQ |
-| **Payment Service**            | SQL Server, Order Service                   | HTTP                          |
-| **Inventory Service**          | SQL Server, Order Service                   | HTTP                          |
-| **Shipping Service**           | Order Service, Notification Service         | HTTP, RabbitMQ                |
-| **Notification Service**       | Twilio, SendGrid/Mailgun                    | RabbitMQ                      |
-| **Admin Service**              | SQL Server, Analytics Service               | HTTP                          |
-| **Analytics Service**          | SQL Server, Prometheus/Grafana              | HTTP                          |
+| **Service**            | **Feature**                              | **Description**                                                                                         |
+|-------------------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| **User Service**        | Registration/Login                       | Manage user accounts, secure JWT-based authentication, and session management.                         |
+|                         | Profile Management                       | Update personal information, manage addresses for shipping.                                             |
+| **Product Service**     | Catalog Management                       | Handle product listings, categories, pricing, and availability.                                         |
+|                         | Reviews and Ratings                      | User feedback to enhance product transparency and trust.                                                |
+| **Cart Service**        | Shopping Cart                            | Add, edit, or remove items in the user’s shopping cart.                                                 |
+| **Order Service**       | Order Lifecycle                          | From order creation to status updates, manage it all seamlessly.                                        |
+| **Payment Service**     | Payment Gateway Integration              | Support for PayPal, VNPay, MOMO, and other gateways for flexible payment options.                       |
+| **Inventory Service**   | Stock Management                         | Track real-time inventory for accurate order processing.                                                |
+| **Shipping Service**    | Shipment Tracking                        | Calculate fees, update delivery statuses, integrate third-party logistics.                              |
+| **Notification Service**| Email and SMS Notifications              | Keep users informed about their order status and promotional campaigns.                                 |
+| **Review Service**      | Product Reviews                          | Manage customer reviews and ratings.                                                                   |
+| **Live Chat Service**   | Real-Time Customer Support               | Integration with tools like Subiz, Talkto, Facebook, or Zalo.                                           |
+| **Admin Service**       | Admin Dashboard                          | Manage platform data, monitor reports, and analyze user behavior for business insights.                 |
+| **Analytics Service**   | User Behavior and Revenue Tracking       | Monitor platform performance and generate detailed reports.                                             |
 
----
-
-## 🔍 Lưu đồ Giao tiếp và Kiến trúc
-
-1. Frontend gửi yêu cầu qua API Gateway.
-2. API Gateway định tuyến yêu cầu đến các Microservices (User, Product, Cart, Order, Payment, Inventory, Shipping, Notification).
-3. Các microservices giao tiếp với nhau khi cần thiết bằng HTTP hoặc RabbitMQ.
-4. Notification Service gửi thông báo qua email/SMS đến người dùng khi có sự kiện quan trọng.
-5. Analytics Service thu thập dữ liệu và giám sát hiệu suất hệ thống với Prometheus và Grafana.
+🔗 **Communication**: Services communicate via **HTTP** for synchronous tasks and **RabbitMQ** for asynchronous messaging.
 
 ---
 
-## ⚙️ Triển khai và Quản lý
+## 🛠️ **Project Technologies**
 
-| 🛠️ **Triển khai & Quản lý**     | 📄 **Chi tiết**                                                                                                        |
-|--------------------------------|------------------------------------------------------------------------------------------------------------------------|
-| **Docker & Docker-Compose**    | Quản lý toàn bộ microservices và các dependencies trong container Docker.                                              |
-| **GitHub Actions**             | CI/CD tự động hóa build, test, và deploy mỗi khi có thay đổi trên GitHub repository.                                   |
-| **Google Cloud (VPS/Shared)**  | Tối ưu chi phí, triển khai container và quản lý dịch vụ với khả năng mở rộng.                                          |
-| **Monitoring (Prometheus/Grafana)** | Giám sát hiệu suất và tình trạng của từng microservice, thiết lập cảnh báo khi gặp sự cố.                             |
-| **Logging (Console Logger)**   | Ghi log các hoạt động và lỗi của từng microservice, hỗ trợ phát hiện lỗi và debug.                                    |
+### 🌐 **Frontend**
+- **Vite** ⚡: Blazing-fast frontend build tool with Hot Module Replacement (HMR).
+- **Telerik UI for ASP.NET Core**: Feature-rich and customizable UI components.
+- **Lazy Loading**: Optimized resource loading for improved user experience.
+
+### 🖥️ **Backend**
+- **ASP.NET Core .NET 8 Version**: Build highly scalable RESTful APIs.
+- **Entity Framework Core**: Simplify database operations with ORM.
+- **Dapper**: Handle complex SQL queries efficiently.
+- **JWT Authentication**: Secure authentication and authorization.
+- **Memcached**: Cache frequently accessed data for faster response times.
+
+### 🗄️ **Database**
+- **SQL Server on Docker**: Centralized, containerized database management.
+
+### 📩 **Messaging and Notifications**
+- **RabbitMQ**: Reliable messaging for asynchronous tasks.
+- **Email Marketing**: Subscription forms and newsletters to boost engagement.
+
+### 🌟 **SEO and Marketing**
+- **SEO Optimizations**: URL-friendly design, Facebook sharing with metadata, and SEOQuarke support.
+- **Social Sharing**: Enable sharing links with images, descriptions, and short URLs.
+
+---
+
+## 🏗️ **Architecture Overview**
+
+![Architecture Overview](placeholder-architecture-image-link)
+
+**CyberCore Store** adopts a robust microservice architecture, ensuring high scalability and modular development. Each service operates independently while maintaining seamless communication.
+
+---
+
+## 🗄️ **Database**
+
+![Database Schema](placeholder-database-image-link)
+
+The database design is tailored for e-commerce needs, handling user accounts, product inventories, orders, and much more with efficiency.
+
+---
+
+## 🐳 **Containerized Docker Images**
+
+![Dockerized Services](placeholder-docker-image-link)
+
+Each microservice is encapsulated in Docker containers, ensuring consistency across development, staging, and production environments.
+
+---
+
+## 🔄 **CI/CD: GitHub Actions**
+
+![CI/CD Pipeline](placeholder-ci-cd-image-link)
+
+Our CI/CD pipeline automates building, testing, and deploying updates, streamlining the development process.
+
+---
+
+## 📊 **Monitoring: Prometheus & Grafana**
+
+![Monitoring Overview](placeholder-monitoring-image-link)
+
+Monitor the health and performance of the system with Prometheus and Grafana. Real-time alerts ensure maximum uptime.
+
+---
+
+## 🌐 **Live Demo**
+
+### **Experience CyberCore Store**
+- **Website**: Explore the user experience of CyberCore Store [Live Demo Link](#)
+- **Grafana Dashboard**: Monitor performance insights for operators [Grafana Link](#)
+
+---
+
+## 📜 **How to Contribute**
+
+1. Fork this repository.
+2. Create a feature branch: `git checkout -b feature-name`.
+3. Commit your changes: `git commit -m "Add feature name"`.
+4. Push to your branch: `git push origin feature-name`.
+5. Submit a pull request!
+
+---
+
+## 🙌 **Acknowledgements**
+
+Special thanks to the **CyberCore** development team for their dedication and expertise in building this platform.
+
+---
+
+> **Stay connected:** Follow us on [GitHub](#) and [LinkedIn](#) for updates and news about CyberCore Store.
+

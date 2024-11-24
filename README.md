@@ -1,18 +1,14 @@
-# 🛒 **CyberCore Store: A Cutting-Edge E-commerce Platform for Tech Enthusiasts**
+# 🛒 **CyberCore Store: Build E-commerce Campaigns with Robust Microservices Architecture**
 
 ![CyberCore Store Logo](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/cybercore.logo.jpg)
 
-Welcome to **CyberCore Store**, your go-to platform for buying top-notch electronic devices like smartphones, laptops, tablets, and more. Designed with a modern microservice architecture, **CyberCore Store** is built to deliver performance, scalability, and user satisfaction. 🌟
+Welcome to **CyberCore Store**, a cutting-edge e-commerce platform built for tech enthusiasts. Whether you're shopping for smartphones, laptops, or tablets, **CyberCore Store** combines seamless user experience with a scalable and high-performance backend powered by microservices architecture. 🌟
 
----
+# 🚀 **About CyberCore Store**
 
-## 🚀 **About CyberCore Store**
+CyberCore Store is a vision to redefine online shopping in Vietnam. Designed to harness the potential of Vietnam's booming digital economy, **CyberCore Store** integrates secure payments, real-time interactions, and marketing tools to empower businesses and enrich customer experiences.
 
-CyberCore Store is not just another e-commerce platform. It’s a vision to empower online retail in Vietnam, offering seamless shopping experiences and supporting businesses in leveraging the potential of **E-commerce Strategy**. With Vietnam's digital economy booming, our platform integrates secure payments, real-time interactions, and marketing tools to bring a competitive edge.
-
----
-
-## 🧩 **Microservices Overview**
+# 🧩 **Microservices Overview**
 
 | **Service**            | **Feature**                              | **Description**                                                                                         |
 |-------------------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------|
@@ -21,124 +17,137 @@ CyberCore Store is not just another e-commerce platform. It’s a vision to empo
 | **Product Service**     | Catalog Management                       | Handle product listings, categories, pricing, and availability.                                         |
 |                         | Reviews and Ratings                      | User feedback to enhance product transparency and trust.                                                |
 | **Cart Service**        | Shopping Cart                            | Add, edit, or remove items in the user’s shopping cart.                                                 |
-| **Order Service**       | Order Lifecycle                          | From order creation to status updates, manage it all seamlessly.                                        |
-| **Payment Service**     | Payment Gateway Integration              | Support for PayPal, VNPay, MOMO, and other gateways for flexible payment options.                       |
-| **Inventory Service**   | Stock Management                         | Track real-time inventory for accurate order processing.                                                |
-| **Shipping Service**    | Shipment Tracking                        | Calculate fees, update delivery statuses, integrate third-party logistics.                              |
-| **Notification Service**| Email and SMS Notifications              | Keep users informed about their order status and promotional campaigns.                                 |
+| **Order Service**       | Order Lifecycle                          | Manage order creation, payment, and status updates seamlessly.                                         |
+| **Payment Service**     | Payment Gateway Integration              | Support for PayPal, VNPay, MOMO, and other payment gateways.                                            |
+| **Inventory Service**   | Stock Management                         | Real-time inventory tracking for accurate processing.                                                   |
+| **Shipping Service**    | Shipment Tracking                        | Calculate fees, update delivery statuses, and integrate third-party logistics.                          |
+| **Notification Service**| Email and SMS Notifications              | Notify users about order status and promotional campaigns.                                              |
 | **Review Service**      | Product Reviews                          | Manage customer reviews and ratings.                                                                   |
-| **Live Chat Service**   | Real-Time Customer Support               | Integration with tools like Subiz, Talkto, Facebook, or Zalo.                                           |
-| **Admin Service**       | Admin Dashboard                          | Manage platform data, monitor reports, and analyze user behavior for business insights.                 |
-| **Analytics Service**   | User Behavior and Revenue Tracking       | Monitor platform performance and generate detailed reports.                                             |
+| **Live Chat Service**   | Real-Time Customer Support               | Enable communication through platforms like Subiz, Talkto, Facebook, or Zalo.                          |
+| **Admin Service**       | Admin Dashboard                          | Analyze platform data, generate reports, and monitor user behavior for insights.                        |
+| **Analytics Service**   | User Behavior and Revenue Tracking       | Detailed reporting on platform performance.                                                            |
 
-🔗 **Communication**: Services communicate via **HTTP** for synchronous tasks and **RabbitMQ** for asynchronous messaging.
-
----
-
-## 🛠️ **Project Technologies**
-
-### 🌐 **Frontend**
-- **Vite** ⚡: Blazing-fast frontend build tool with Hot Module Replacement (HMR).
-- **Telerik UI for ASP.NET Core**: Feature-rich and customizable UI components.
-- **Lazy Loading**: Optimized resource loading for improved user experience.
-
-### 🖥️ **Backend**
-- **ASP.NET Core .NET 8 Version**: Build highly scalable RESTful APIs.
-- **Entity Framework Core**: Simplify database operations with ORM.
-- **Dapper**: Handle complex SQL queries efficiently.
-- **JWT Authentication**: Secure authentication and authorization.
-- **Memcached**: Cache frequently accessed data for faster response times.
-
-### 🗄️ **Database**
-- **SQL Server on Docker**: Centralized, containerized database management.
-
-### 📩 **Messaging and Notifications**
-- **RabbitMQ**: Reliable messaging for asynchronous tasks.
-- **Email Marketing**: Subscription forms and newsletters to boost engagement.
-
-### 🌟 **SEO and Marketing**
-- **SEO Optimizations**: URL-friendly design, Facebook sharing with metadata, and SEOQuarke support.
-- **Social Sharing**: Enable sharing links with images, descriptions, and short URLs.
+🔗 **Communication**: Services communicate via **HTTP** (synchronous) and **RabbitMQ** (asynchronous).
 
 ---
 
-## 🏗️ **Architecture Overview**
+# 🛠️ **Technology Stack**
+
+## 🌐 **Frontend**
+- **Vite** ⚡: Fast development and build tool.
+- **Telerik UI for ASP.NET Core**: High-performance UI components.
+- **Lazy Loading**: Optimized user experience through on-demand resource loading.
+
+## 🖥️ **Backend**
+- **ASP.NET Core .NET 8**: High-performance RESTful API.
+- **Entity Framework Core**: ORM for database management.
+- **Dapper**: Efficient handling of complex SQL queries.
+- **JWT Authentication**: Secure user authentication.
+- **Memcached**: High-speed data caching.
+
+## 🗄️ **Database**
+- **SQL Server on Docker**: Containerized database solution.
+
+## 📩 **Messaging & Notifications**
+- **RabbitMQ**: Asynchronous messaging.
+- **Email Campaigns**: Integration for newsletters and promotions.
+
+## 🌟 **SEO & Marketing**
+- **SEO Optimization**: Enhanced search engine visibility.
+- **Social Sharing**: Tools to promote on Facebook, Twitter, and more.
+
+---
+
+# 🏗️ **System Architecture**
 
 ![Architecture Overview](placeholder-architecture-image-link)
 
-**CyberCore Store** adopts a robust microservice architecture, ensuring high scalability and modular development. Each service operates independently while maintaining seamless communication.
+CyberCore Store leverages a microservice-based architecture to ensure modular development and scalability. Each service is independently deployable and communicates efficiently.
 
 ---
 
-## 🗄️ **Database**
+# 🗄️ **Database Schema**
 
 ![Database Schema](placeholder-database-image-link)
 
-The database design is tailored for e-commerce needs, handling user accounts, product inventories, orders, and much more with efficiency.
+The database design is optimized for e-commerce requirements, including user data, orders, and inventory.
 
 ---
 
+# 🔐 **Understanding JWT (JSON Web Token)**
 
-## 🐳 Dockerizing Containers with Docker Compose
+## **What is JWT?**
 
-Docker Compose simplifies multi-container application management. Here's a concise overview:
+![What is JWT?](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/what-is-jwt.png)
 
-| 🧩 **Aspect**      | ⚙️ **Details**                                                                                          |
-|--------------------|-------------------------------------------------------------------------------------------------------|
-| **Concept**        | Defines and manages multi-container Docker apps using a `docker-compose.staging.yml` file.                   |
-| **Functions**      | - Configures services (e.g., backend, database).<br>- Automates image build & container orchestration. |
-| **Benefits**       | - Simplifies setup.<br>- Ensures consistency across environments.<br>- Supports scalability & efficiency. |
-| **Impact**         | Boosts productivity, reduces complexity, and enhances microservices deployment workflows.            |
+JWT is a compact and secure way to transmit information between parties. Its stateless design ensures scalability without needing session storage.
 
+### Key Components:
+1. **Header**: Contains token metadata, including the algorithm.
+2. **Payload**: Includes claims about the user.
+3. **Signature**: Validates the token's integrity.
 
-### 🔗 **Docker Flow**
+## **How JWT Works**
 
-The image below illustrates how Docker Compose integrates with `Dockerfile`s to build images and manage containers efficiently:
+![How JWT Works](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/how-jwt-works.png)
+
+1. User logs in.
+2. The server validates credentials and generates a JWT.
+3. The JWT is sent to the client, which uses it for API requests.
+4. The server verifies the JWT for every request.
+
+---
+
+# 🐳 **Dockerized Microservices**
+
+## Key Features:
+- Multi-container app definitions via `docker-compose.yml`.
+- Automates container builds and service orchestration.
+- Enhances consistency and deployment efficiency.
 
 ![Dockerized Services](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/Containerize-Docker-Images.png)
 
-
 ---
 
-## 🔄 **CI/CD: GitHub Actions**
+# 🔄 **CI/CD with GitHub Actions**
 
 ![CI/CD Pipeline](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/ci-cd.png)
 
-Our CI/CD pipeline automates building, testing, and deploying updates, streamlining the development process.
+Automated workflows ensure robust testing, build, and deployment pipelines.
 
 ---
 
-## 📊 **Monitoring: Prometheus & Grafana**
+# 📊 **Real-Time Monitoring**
+
+## Monitoring Tools:
+- **Prometheus**: Tracks system health and performance.
+- **Grafana**: Provides dashboards and alerts.
 
 ![Monitoring Overview](https://github.com/tuongnguyen191003/ecommerce-microservices/blob/main/assets/images/videoframe_2813.png)
 
-Monitor the health and performance of the system with Prometheus and Grafana. Real-time alerts ensure maximum uptime.
+---
+
+# 🌐 **Try CyberCore Store**
+
+- **Website**: [Live Demo Link](#)
+- **Grafana Dashboard**: [Performance Dashboard](#)
 
 ---
 
-## 🌐 **Live Demo**
+# 📜 **Contribute**
 
-### **Experience CyberCore Store**
-- **Website**: Explore the user experience of CyberCore Store [Live Demo Link](#)
-- **Grafana Dashboard**: Monitor performance insights for operators [Grafana Link](#)
-
----
-
-## 📜 **How to Contribute**
-
-1. Fork this repository.
-2. Create a feature branch: `git checkout -b feature-name`.
-3. Commit your changes: `git commit -m "Add feature name"`.
+1. Fork the repository.
+2. Create a branch: `git checkout -b feature-name`.
+3. Commit changes: `git commit -m "Add feature name"`.
 4. Push to your branch: `git push origin feature-name`.
-5. Submit a pull request!
+5. Submit a pull request.
 
 ---
 
-## 🙌 **Acknowledgements**
+# 🙌 **Acknowledgements**
 
-Special thanks to the **CyberCore** development team for their dedication and expertise in building this platform.
+Special thanks to the **CyberCore** development team for their dedication.
 
 ---
 
-> **Stay connected:** Follow us on [GitHub](#) and [LinkedIn](#) for updates and news about CyberCore Store.
-
+> **Follow us** on [GitHub](#) and [LinkedIn](#) for updates.

@@ -16,7 +16,7 @@ namespace SharedLibrary.Security
             _config = config;
         }
 
-        public string GenerateToken(string userId)
+        public string GenerateToken(string userId, IEnumerable<string> roles)
         {
             try
             {
@@ -33,24 +33,21 @@ namespace SharedLibrary.Security
                 var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
                 var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-                // var claims = new[]
-                // {
-                //     new Claim(JwtRegisteredClaimNames.Sub, userId),
-                //     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                // };
-
-                var claims = new[]
+                // Thêm các claims cơ bản và roles vào token
+                var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, userId),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
+                // Thêm roles vào claims
+                claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
                 var token = new JwtSecurityToken(
                     issuer: issuer,
                     audience: audience,
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(30),
+                    expires: DateTime.Now.AddDays(7),
                     signingCredentials: creds
                 );
 

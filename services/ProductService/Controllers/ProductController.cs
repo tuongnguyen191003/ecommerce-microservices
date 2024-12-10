@@ -1,10 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Data;
-using ProductService.Models;
-using ProductService.Data.Entities;
-using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
 
 namespace ProductService.Controllers
 {
@@ -13,69 +10,43 @@ namespace ProductService.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ProductDbContext _context;
-        private readonly IDistributedCache _cache;
 
-
-        public ProductController(ProductDbContext context, IDistributedCache cache)
+        public ProductController(ProductDbContext context)
         {
             _context = context;
-            _cache = cache;
         }
 
         // GET: /api/products
         [HttpGet]
-        public async Task<IActionResult> GetProducts([FromQuery] string? categoryId, [FromQuery] string? brandId, [FromQuery] string? sortBy, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetProducts()
         {
-            string cacheKey = $"productList_{categoryId}_{brandId}_{sortBy}_{page}_{pageSize}";
-            string serializedProductList;
-            var productList = new List<Product>();
-
-            var redisProductList = await _cache.GetStringAsync(cacheKey);
-            if (!string.IsNullOrEmpty(redisProductList))
-            {
-                serializedProductList = redisProductList;
-                productList = JsonSerializer.Deserialize<List<Product>>(serializedProductList);
-            }
-            else
-            {
-                var productsQuery = _context.Products.AsNoTracking().AsQueryable();
-
-                // Lọc sản phẩm theo danh mục
-                if (!string.IsNullOrEmpty(categoryId))
+            var products = await _context.Products
+                .Select(p => new ProductDto
                 {
-                    productsQuery = productsQuery.Where(p => p.ProductCategories.Any(m => m.CategoryId.ToString() == categoryId));
-                }
+                    Id = p.Id,
+                    Name = p.Name,
+                    ShortDescription = p.ShortDescription,
+                    LongDescription = p.LongDescription,
+                    CategoryId = p.CategoryId,
+                    BrandId = p.BrandId,
+                    IsPublished = p.IsPublished,
+                    Tags = p.Tags,
+                    IsShowHomePage = p.IsShowHomePage,
+                    Price = p.Price,
+                    OldPrice = p.OldPrice,
+                    CostPrice = p.CostPrice,
+                    IsBuyButton = p.IsBuyButton,
+                    IsWishList = p.IsWishList,
+                    MetaTitle = p.MetaTitle,
+                    MetaDescription = p.MetaDescription,
+                    MetaKeywords = p.MetaKeywords,
+                    SeoUrl = p.SeoUrl,
+                    Picture = p.Picture,
+                    Video = p.Video,
+                    Slug = p.Slug
+                }).ToListAsync();
 
-                // Lọc sản phẩm theo thương hiệu
-                if (!string.IsNullOrEmpty(brandId))
-                {
-                    productsQuery = productsQuery.Where(p => p.BrandId.ToString() == brandId);
-                }
-
-                // Sắp xếp sản phẩm
-                productsQuery = sortBy switch
-                {
-                    "price" => productsQuery.OrderBy(p => p.DefaultPrice),
-                    "price_desc" => productsQuery.OrderByDescending(p => p.DefaultPrice),
-                    "name" => productsQuery.OrderBy(p => p.Name),
-                    "name_desc" => productsQuery.OrderByDescending(p => p.Name),
-                    "createdAt" => productsQuery.OrderBy(p => p.CreatedAt),
-                    "createdAt_desc" => productsQuery.OrderByDescending(p => p.CreatedAt),
-                    _ => productsQuery.OrderBy(p => p.Id),
-                };
-
-                // Phân trang sản phẩm
-                var totalItems = await productsQuery.CountAsync();
-                productList = await productsQuery.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-
-                serializedProductList = JsonSerializer.Serialize(productList);
-                await _cache.SetStringAsync(cacheKey, serializedProductList, new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
-                });
-            }
-
-            return Ok(new PagedResponse<Product>(productList, page, pageSize, productList.Count));
+            return Ok(products);
         }
 
         // GET: /api/products/{id}
@@ -83,11 +54,31 @@ namespace ProductService.Controllers
         public async Task<IActionResult> GetProductById(int id)
         {
             var product = await _context.Products
-                .AsNoTracking()
-                .Include(p => p.Variants)
-                .Include(p => p.ProductCategories)
-                    .ThenInclude(pc => pc.Category)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .Where(p => p.Id == id)
+                .Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    ShortDescription = p.ShortDescription,
+                    LongDescription = p.LongDescription,
+                    CategoryId = p.CategoryId,
+                    BrandId = p.BrandId,
+                    IsPublished = p.IsPublished,
+                    Tags = p.Tags,
+                    IsShowHomePage = p.IsShowHomePage,
+                    Price = p.Price,
+                    OldPrice = p.OldPrice,
+                    CostPrice = p.CostPrice,
+                    IsBuyButton = p.IsBuyButton,
+                    IsWishList = p.IsWishList,
+                    MetaTitle = p.MetaTitle,
+                    MetaDescription = p.MetaDescription,
+                    MetaKeywords = p.MetaKeywords,
+                    SeoUrl = p.SeoUrl,
+                    Picture = p.Picture,
+                    Video = p.Video,
+                    Slug = p.Slug
+                }).FirstOrDefaultAsync();
 
             if (product == null)
             {
@@ -97,35 +88,107 @@ namespace ProductService.Controllers
             return Ok(product);
         }
 
-        // GET: /api/products/search
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchProducts([FromQuery] string query)
+        // POST: /api/admin/products
+        [HttpPost]
+        [Route("/api/admin/products")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddProduct([FromBody] CreateProductDto dto)
         {
-            if (string.IsNullOrWhiteSpace(query))
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Tạo slug tự động cho sản phẩm
+            var slug = GenerateSlug(dto.Name);
+
+            var product = new Product
             {
-                return BadRequest(new { message = "Query is required." });
-            }
+                Name = dto.Name,
+                ShortDescription = dto.ShortDescription,
+                LongDescription = dto.LongDescription,
+                CategoryId = dto.CategoryId,
+                BrandId = dto.BrandId,
+                IsPublished = dto.IsPublished,
+                Tags = dto.Tags,
+                IsShowHomePage = dto.IsShowHomePage,
+                Price = dto.Price,
+                OldPrice = dto.OldPrice,
+                CostPrice = dto.CostPrice,
+                IsBuyButton = dto.IsBuyButton,
+                IsWishList = dto.IsWishList,
+                MetaTitle = dto.MetaTitle,
+                MetaDescription = dto.MetaDescription,
+                MetaKeywords = dto.MetaKeywords,
+                SeoUrl = dto.SeoUrl,
+                Picture = dto.Picture,
+                Video = dto.Video,
+                Slug = slug.ToLower()
+            };
 
-            query = query.ToLower();
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
 
-            var products = await _context.Products
-                .AsNoTracking()
-                .Where(p => p.Name.ToLower().Contains(query) || p.Description.ToLower().Contains(query))
-                .ToListAsync();
-
-            return Ok(products);
+            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
 
-        // GET: /api/products/featured
-        [HttpGet("featured")]
-        public async Task<IActionResult> GetFeaturedProducts([FromQuery] decimal? maxPrice = 1000)
+        // PUT: /api/admin/products/{id}
+        [HttpPut]
+        [Route("/api/admin/products/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto dto)
         {
-            var featuredProducts = await _context.Products
-                .AsNoTracking()
-                .Where(p => p.IsActive && (!maxPrice.HasValue || p.DefaultPrice <= maxPrice.Value))
-                .ToListAsync();
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound(new { message = "Product not found" });
+            }
 
-            return Ok(featuredProducts);
+            product.Name = dto.Name;
+            product.ShortDescription = dto.ShortDescription;
+            product.LongDescription = dto.LongDescription;
+            product.CategoryId = dto.CategoryId;
+            product.BrandId = dto.BrandId;
+            product.IsPublished = dto.IsPublished;
+            product.Tags = dto.Tags;
+            product.IsShowHomePage = dto.IsShowHomePage;
+            product.Price = dto.Price;
+            product.OldPrice = dto.OldPrice;
+            product.CostPrice = dto.CostPrice;
+            product.IsBuyButton = dto.IsBuyButton;
+            product.IsWishList = dto.IsWishList;
+            product.MetaTitle = dto.MetaTitle;
+            product.MetaDescription = dto.MetaDescription;
+            product.MetaKeywords = dto.MetaKeywords;
+            product.SeoUrl = dto.SeoUrl;
+            product.Picture = dto.Picture;
+            product.Video = dto.Video;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(product);
+        }
+
+        // DELETE: /api/admin/products/{id}
+        [HttpDelete]
+        [Route("/api/admin/products/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound(new { message = "Product not found" });
+            }
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // Hàm tạo slug từ tên sản phẩm
+        private string GenerateSlug(string name)
+        {
+            return name.ToLower().Replace(" ", "-");
         }
     }
 }

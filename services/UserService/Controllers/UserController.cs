@@ -22,7 +22,7 @@ namespace UserService.Controllers
             _tokenGenerator = tokenGenerator;
             _context = context;
         }
-
+        // GET: /api/users
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
@@ -64,7 +64,7 @@ namespace UserService.Controllers
                 Message = "User registered successfully."
             });
         }
-
+        // POST: /api/users/login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -73,17 +73,27 @@ namespace UserService.Controllers
                 return BadRequest(new { message = "Username and Password are required." });
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.Username == request.Username);
+
             if (user == null || !VerifyPassword(request.Password, user.Password))
             {
                 return Unauthorized(new { message = "Invalid username or password." });
             }
 
-            var token = _tokenGenerator.GenerateToken(user.Username);
+            // Lấy danh sách roles của user
+            var roles = user.UserRoles.Select(ur => ur.Role.Name).ToList();
+
+            // Tạo token kèm roles
+            var token = _tokenGenerator.GenerateToken(user.Username, roles);
+
             return Ok(new LoginResponse { Token = token });
         }
 
 
+        // GET: /api/users/profile
         [HttpGet("profile")]
         [Authorize]
         public async Task<IActionResult> GetProfile()
@@ -94,23 +104,33 @@ namespace UserService.Controllers
                 return Unauthorized(new { message = "Invalid token." });
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.Username == username);
+
             if (user == null)
             {
                 return NotFound(new { message = "User not found." });
             }
 
+            var roles = user.UserRoles.Select(ur => ur.Role.Name).ToList();
+
             return Ok(new UserProfileResponse
             {
+                Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 CreatedAt = user.CreatedAt,
-                IsActive = user.IsActive
+                IsActive = user.IsActive,
+                Roles = roles
             });
         }
 
+
         // Update Profile
+        // PUT: /api/users/profile
         [HttpPut("profile")]
         [Authorize]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
@@ -144,7 +164,7 @@ namespace UserService.Controllers
                 IsActive = user.IsActive
             });
         }
-
+        // DELETE: /api/users/profile
         [HttpDelete("profile")]
         [Authorize]
         public async Task<IActionResult> DeleteProfile()

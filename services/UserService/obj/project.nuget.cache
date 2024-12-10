@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "reI5s2ZLbVxVfKQAmf+UKNcnesjjtpTvpOa8cxxtv/kkQSL/zgyC7KImS3+NTKHvomH0ao/l+cyx9x9KislXlA==",
+  "dgSpecHash": "T3GuWfYQ/Z7r8Ncw5ZHcd4R03IBUqcRXe7RgytPXGLDvVgFZPr6o7vjCDXE39UrfpRaITJ4WCJLVdIB9MfFswQ==",
   "success": true,
   "projectFilePath": "/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/UserService.csproj",
   "expectedPackageFiles": [
     "/home/tuongnguyen/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/home/tuongnguyen/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",
+    "/home/tuongnguyen/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/tuongnguyen/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/tuongnguyen/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/8.0.0/microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",
     "/home/tuongnguyen/.nuget/packages/microsoft.aspnetcore.openapi/8.0.10/microsoft.aspnetcore.openapi.8.0.10.nupkg.sha512",

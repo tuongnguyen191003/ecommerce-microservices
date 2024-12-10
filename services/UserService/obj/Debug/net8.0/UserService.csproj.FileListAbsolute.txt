@@ -183,3 +183,4 @@
 /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/obj/Debug/net8.0/UserService.pdb
 /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/obj/Debug/net8.0/UserService.genruntimeconfig.cache
 /home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/obj/Debug/net8.0/ref/UserService.dll
+/home/tuongnguyen/Desktop/ecommerce-microservices/ecommerce-microservices/services/UserService/bin/Debug/net8.0/BCrypt.Net-Next.dll

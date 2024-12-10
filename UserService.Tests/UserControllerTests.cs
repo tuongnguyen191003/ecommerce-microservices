@@ -90,15 +90,19 @@ namespace UserService.Tests.Controllers
             var user = new User
             {
                 Username = "ValidUser",
-                Password = HashPassword("ValidPassword"), // Sử dụng hàm hash như thực tế
+                Password = HashPassword("ValidPassword"),
                 Email = "valid@example.com"
             };
+
             _dbContext.Users.Add(user);
+            _dbContext.Roles.Add(new Role { Id = 1, Name = "Admin" }); // Thêm role
+            _dbContext.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = 1 });
             await _dbContext.SaveChangesAsync();
 
             // Mock JwtTokenGenerator để trả về token giả lập
+            var roles = new List<string> { "Admin" };
             _mockTokenGenerator
-                .Setup(x => x.GenerateToken(It.IsAny<string>()))
+                .Setup(x => x.GenerateToken(It.IsAny<string>(), roles))
                 .Returns("FakeJWTToken");
 
             var request = new LoginRequest
@@ -111,12 +115,11 @@ namespace UserService.Tests.Controllers
             var result = await _controller.Login(request);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result); // Kiểm tra kết quả trả về
-            //var response = okResult.Value as dynamic; // Chuyển đổi sang dynamic
+            var okResult = Assert.IsType<OkObjectResult>(result);
             var response = Assert.IsType<LoginResponse>(okResult.Value);
-            Assert.NotNull(response); // Đảm bảo response không null
-            Assert.Equal("FakeJWTToken", (string)response.Token); // Kiểm tra token trả về
-            }
+            Assert.NotNull(response);
+            Assert.Equal("FakeJWTToken", response.Token);
+        }
 
         // Hàm hash giống trong UserController
         private string HashPassword(string password)

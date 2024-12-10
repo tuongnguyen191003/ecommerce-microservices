@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -67,10 +68,24 @@ builder.Services.AddSharedServices<UserDbContext>(builder.Configuration, "UserSe
 // Đăng ký JwtTokenGenerator
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
-
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+// Gọi SeedData
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Gọi SeedData để seed dữ liệu
+        await SeedData.InitializeAsync(services);
+    }
+    catch (Exception ex)
+    {
+        Log.Fatal(ex, "An error occurred while seeding the database.");
+    }
+}
 
 // Cấu hình middleware
 if (app.Environment.IsDevelopment())

@@ -1,48 +1,66 @@
 using Microsoft.EntityFrameworkCore;
-using ProductService.Data.Entities;
 
-public class ProductDbContext : DbContext
+namespace ProductService.Data
 {
-    private readonly IConfiguration? _configuration;
-
-    public ProductDbContext(DbContextOptions<ProductDbContext> options, IConfiguration? configuration = null)
-        : base(options)
+    public class ProductDbContext : DbContext
     {
-        _configuration = configuration;
-    }
+        public ProductDbContext(DbContextOptions<ProductDbContext> options) : base(options) { }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Brand> Brands { get; set; } // Thay thế Manufacturer bằng Brand
+        public DbSet<ProductVariant> ProductVariants { get; set; }
+        public DbSet<ProductVariantDiscount> ProductVariantDiscounts { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
+        public DbSet<ProductDiscount> ProductDiscounts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Sử dụng chuỗi kết nối từ cấu hình (fallback khi chạy lệnh Update-Database)
-            var connectionString = _configuration?.GetConnectionString("ProductServiceConnection");
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new InvalidOperationException("ConnectionString is not provided or initialized.");
-            }
-            optionsBuilder.UseSqlServer(connectionString);
+            base.OnModelCreating(modelBuilder);
+
+            // Configuring relationships and table constraints
+
+            // Category to Product - 1:n relationship (One category can have many products)
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);  // Giảm nguy cơ cascade vòng lặp
+
+            // Brand to Product - 1:n relationship (One brand can have many products)
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Brand)
+                .WithMany(b => b.Products)
+                .HasForeignKey(p => p.BrandId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Product to ProductVariant - 1:n relationship (One product can have many variants)
+            modelBuilder.Entity<ProductVariant>()
+                .HasOne(pv => pv.Product)
+                .WithMany(p => p.ProductVariants)
+                .HasForeignKey(pv => pv.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ProductVariant to ProductVariantDiscount - 1:n relationship (One product variant can have many discounts)
+            modelBuilder.Entity<ProductVariantDiscount>()
+                .HasOne(pvd => pvd.ProductVariant)
+                .WithMany(pv => pv.ProductVariantDiscounts)
+                .HasForeignKey(pvd => pvd.ProductVariantId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ProductDiscount to Product - n:1 relationship (One product can have many discounts)
+            modelBuilder.Entity<ProductDiscount>()
+                .HasOne(pd => pd.Product)
+                .WithMany(p => p.ProductDiscounts)
+                .HasForeignKey(pd => pd.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ProductDiscount to Discount - n:1 relationship (One discount can apply to many products)
+            modelBuilder.Entity<ProductDiscount>()
+                .HasOne(pd => pd.Discount)
+                .WithMany(d => d.ProductDiscounts)
+                .HasForeignKey(pd => pd.DiscountId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
-    }
-
-    // Định nghĩa DbSet cho các bảng
-    public DbSet<Product> Products { get; set; }
-    public DbSet<ProductVariant> ProductVariants { get; set; }
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<ProductCategoryMapping> ProductCategoryMappings { get; set; }
-    public DbSet<Brand> Brands { get; set; }
-    public DbSet<ProductReview> ProductReviews { get; set; }
-    public DbSet<ProductOption> ProductOptions { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        // Cấu hình quan hệ danh mục cha/con
-        modelBuilder.Entity<Category>()
-            .HasOne(c => c.ParentCategory)
-            .WithMany(c => c.SubCategories)
-            .HasForeignKey(c => c.ParentCategoryId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        base.OnModelCreating(modelBuilder);
     }
 }

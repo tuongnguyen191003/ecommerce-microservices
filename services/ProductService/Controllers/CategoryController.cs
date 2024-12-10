@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Data;
-using ProductService.Data.Entities;
 
 namespace ProductService.Controllers
 {
@@ -18,34 +18,33 @@ namespace ProductService.Controllers
 
         // GET: /api/categories
         [HttpGet]
-        public async Task<IActionResult> GetCategories([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? sortBy = null)
+        public async Task<IActionResult> GetCategories()
         {
-            var categoriesQuery = _context.Categories.AsNoTracking().AsQueryable();
+            var categories = await _context.Categories
+                .ToListAsync();
 
-            // Apply sorting
-            categoriesQuery = sortBy switch
+            if (categories == null || categories.Count == 0)
             {
-                "name" => categoriesQuery.OrderBy(c => c.Name),
-                "name_desc" => categoriesQuery.OrderByDescending(c => c.Name),
-                "createdAt" => categoriesQuery.OrderBy(c => c.CreatedAt),
-                "createdAt_desc" => categoriesQuery.OrderByDescending(c => c.CreatedAt),
-                _ => categoriesQuery.OrderBy(c => c.Id),
-            };
+                return NotFound(new { message = "No categories found." });
+            }
 
-            // Apply pagination
-            var totalItems = await categoriesQuery.CountAsync();
-            var categories = await categoriesQuery.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var result = categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Description = c.Description,
+                Published = c.Published,
+                DisplayOrder = c.DisplayOrder
+            }).ToList();
 
-            return Ok(new { Page = page, PageSize = pageSize, TotalItems = totalItems, Items = categories });
+            return Ok(result);
         }
 
         // GET: /api/categories/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
-            // Retrieve a specific category by ID
             var category = await _context.Categories
-                .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (category == null)
@@ -53,24 +52,87 @@ namespace ProductService.Controllers
                 return NotFound(new { message = "Category not found." });
             }
 
+            var result = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                Published = category.Published,
+                DisplayOrder = category.DisplayOrder
+            };
+
+            return Ok(result);
+        }
+
+        // POST: /api/admin/categories
+        [HttpPost]
+        [Route("/api/admin/categories")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddCategory([FromBody] CreateCategoryDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var category = new Category
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                Published = dto.Published,
+                DisplayOrder = dto.DisplayOrder,
+                Slug = GenerateSlug(dto.Name)  // Tạo slug từ tên
+            };
+
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
+        }
+
+        private string GenerateSlug(string name)
+        {
+            // Logic tạo Slug từ Name, có thể sử dụng một thư viện để chuẩn hóa, ví dụ như:
+            return name.ToLower().Replace(" ", "-");  // Ví dụ đơn giản
+        }
+
+
+        // PUT: /api/admin/categories/{id}
+        [HttpPut]
+        [Route("/api/admin/categories/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto dto)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound(new { message = "Category not found" });
+            }
+
+            category.Name = dto.Name;
+            category.Description = dto.Description;
+            category.Published = dto.Published;
+            category.DisplayOrder = dto.DisplayOrder;
+
+            await _context.SaveChangesAsync();
+
             return Ok(category);
         }
 
-        // GET: /api/categories/{categoryId}/subcategories
-        [HttpGet("{categoryId}/subcategories")]
-        public async Task<IActionResult> GetSubcategories(int categoryId)
+        // DELETE: /api/admin/categories/{id}
+        [HttpDelete]
+        [Route("/api/admin/categories/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories
-                .AsNoTracking()
-                .Include(c => c.SubCategories)
-                .FirstOrDefaultAsync(c => c.Id == categoryId);
-
+            var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
-                return NotFound(new { message = "Category not found." });
+                return NotFound(new { message = "Category not found" });
             }
 
-            return Ok(category.SubCategories);
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
-} 
+}
